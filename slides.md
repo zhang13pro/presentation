@@ -5,7 +5,7 @@ theme: seriph
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://source.unsplash.com/collection/94734566/1920x1080
 # apply any windi css classes to the current slide
-class: 'text-center'
+class: "text-center"
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
 # show line numbers in code blocks
@@ -21,367 +21,150 @@ drawings:
   persist: false
 ---
 
-# Welcome to Slidev
-
-Presentation slides for developers
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
-
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
-    class="text-xl icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
-
----
-
-# What is Slidev?
-
-Slidev is a slides maker and presenter designed for developers, consist of the following features
-
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
-
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
+# Webpack 原理
 
-<!--
-测试
--->
+## 模块化的演进
 
----
+### 文件划分
 
-# Navigation
+- 模块直接在全局工作，大量模块成员污染全局作用域
+- 没有私有空间，所有模块内的成员都可以在模块外部被访问或者修改
+- 一旦模块增多，容易产生命名冲突
+- 无法管理模块与模块之间的依赖关系
+- 在维护的过程中也很难分辨每个成员所属的模块
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+### 命名空间
 
-### Keyboard Shortcuts
+- 解决命名冲突问题
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+### IIFE
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+- 解决命名冲突和全局作用域污染
 
----
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
----
+### IIFE 依赖参数
 
-# Code
+- 明确模块之间的依赖关系
 
-Use code snippets and get the highlighting directly![^1]
+## 模块化规范
 
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  role: string
-}
+### CommonJS
 
-function updateUser(id: number, update: User) {
-  const user = getUser(id)
-  const newUser = {...user, ...update}  
-  saveUser(id, newUser)
-}
-```
+- 同步加载模块
 
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+### AMD(Asynchronous Module Definition)
 
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+- Require.js
 
-<style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
+### CMD
 
----
+- Sea.js
 
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="-t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
-
----
-preload: false
----
+### ES Modules
 
-# Animations
+- 兼容问题
+- 多模块文件的频繁请求
+- 前端应用的非 JS 模块
 
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
+## Mode
 
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
-  Slidev
-</div>
-```
+### production
 
-<div class="w-60 relative mt-6">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-square.png"
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-circle.png"
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-triangle.png"
-    />
-  </div>
+- 启动内置优化插件，自动优化打包结果，打包速度偏慢
 
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
+### development
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
+- 自动优化打包速度，添加一些调试过程中的辅助插件
 
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
+### none
 
-[Learn More](https://sli.dev/guide/animations.html#motion)
+- 运行最原始的打包，不做任何额外处理
 
-</div>
+## 打包结果运行原理(V5)
 
----
+### V4
 
-# LaTeX
+- 生成 IIFE，每个模块对应一个函数直接量（表达式）作为参数数组里的 item 传入
 
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
+### V5
 
-<br>
+- **webpack_modules** 变量 保存模块参数[IIFE]
 
-Inline $\sqrt{3x-1}+(1+x)^2$
+### **webpack_module_cache** 对象 缓存模块
 
-Block
-$$
-\begin{array}{c}
+### **webpack_require**(id) 加载指定模块
 
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+- 判断缓存是否可用
 
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+### IIFE 包裹的工具函数
 
-\nabla \cdot \vec{\mathbf{B}} & = 0
+### 调用**webpack_require**(module_id)
 
-\end{array}
-$$
+## Loader
 
-<br>
+### webpack 只解析 JS token
 
-[Learn more](https://sli.dev/guide/syntax#latex)
+### 实现不同种类资源模块加载的核心
 
----
+### css-loader
 
-# Diagrams
+- 本质是将 CSS 脚本字符串 push 到 **_CSS_LOADER_EXPORT_** 数组
 
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
+### style-loader
 
-<div class="grid grid-cols-3 gap-10 pt-4 -mb-6">
+- insertStyleElement() 创建 style 标签
 
-```mermaid {scale: 0.5}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
+### loader 本质是一个处理依赖资源(作为参数传入)的函数，并返回处理结果(标准的 JS 代码字符串)
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
+### loader 返回结果直接被拼接到构建结果，所以得是 JS 代码，不然会报错
 
-```plantuml {scale: 0.7}
-@startuml
+## Plugin
 
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
+### 本质就是钩子机制，往不同节点上挂载不同的任务从而扩展 webpack 的能力
 
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
+### 写一个插件类
 
-cloud {
-  [Example 1]
-}
+- 定义 apply 方法
+- compiler 对象作为参数
+- compilation 对象获取依赖模块
+- 对模块代码进行操作并返回
 
+### 理论上 loader 能做的事使用 plugin 也能做
 
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
+### plugin 能完成 loader 的功能吗
 
+- loader 是在加载过程中，拿到源文件内容，再进行一些处理，最后转化成 js 代码。
+- plugin 也能够在合适的时机拿到源文件内容，并通过一些操作，最后覆盖源文件。
+- 所以理论上是可行的，但不符合 webpack 的设计哲学。
 
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
+## 运行机制
 
-@enduml
-```
+### 通过 Loader 处理特殊类型资源的加载，例如加载样式、图片；
 
-</div>
+### 通过 Plugin 实现各种自动化的构建任务，例如自动压缩、自动发布。
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+### 打包过程
 
+- 根据配置找到指定入口文件
+- 根据 import , require 构建依赖关系树
+- 遍历依赖交给指定 loader 加载模块
+- 加载结果放入打包结果(bundle.js)
+- 无法用 JS 表示的资源将对应的访问路径作为这个模块的导出成员暴露给外部
 
----
-layout: center
-class: text-center
----
+## 工作原理
 
-# Learn More
+### 关键环节
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+- Webpack CLI 启动打包流程
+- 载入 Webpack 核心模块，创建 Compiler 对象
+- 使用 Compiler 对象开始编译整个项目
+- 从入口文件开始，解析模块依赖，形成依赖关系树
+- 递归依赖树，将每个模块交给对应的 Loader 处理
+- 合并 Loader 处理完的结果，将打包结果输出到 dist 目录
+
+### Webpack CLI
+
+### 创建 Compiler 对象
+
+### 开始构建
+
+### make 阶段
