@@ -9,7 +9,7 @@ class: "text-center"
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
 # show line numbers in code blocks
-lineNumbers: false
+lineNumbers: true
 # some information about the slides, markdown enabled
 info: |
   ## Slidev Starter Template
@@ -21,82 +21,70 @@ drawings:
   persist: false
 ---
 
-# Run JavaScript
+# Algorithm with JS
 
 [@zhang13pro](https://github.com/zhang13pro)
 
 ---
 
-# this 关键字
+# Before...
 
-`this` 和执行上下文绑定
+- 不要忽视基本算法
+- 考虑极端(边界)条件
+- 正确本身是相对概念
+- 解决问题比没有解决强
+- 考虑怎样优化
 
-<div class="flex">
-  <img src="/context.png" class="m-20 h-20 rounded shadow left" alt="执行上下文中的this" />
-
-</div>
-
-- 函数调用
-- 方法调用
-- new 构造
-- 显式绑定
+ <!-- 正确本身是相对概念，空间换时间、预处理信息（排序）、瓶颈处寻找答案 -->
 
 ---
 
-# apply
+# 数组
+
+## 二分查找
 
 ```js
-Function.prototype.myApply = function (context) {
-  if (typeof this !== "function") throw new Error("TypeError");
+// T O(logn) S O(1)
+function binarySearch(arr, target) {
+  let l = 0,
+    r = arr.length - 1;
 
-  let result = null;
-  context = context || window;
+  while (l < r) {
+    let mid = l + (r - l) / 2; // 防止数值溢出bug
+    if (arr[mid] === target) return mid;
 
-  context.fn = this;
-  if (arguments[1]) {
-    result = context.fn(...arguments[1]);
-  } else {
-    result = context.fn();
+    if (arr[mid] < target) l = mid + 1;
+    else r = mid;
   }
-};
+
+  return -1;
+}
 ```
 
 ---
 
-# call
+## LeetCode-283
+
+[# 移动零](https://leetcode-cn.com/problems/move-zeroes/)
 
 ```js
-Function.prototype.myCall = function (context) {
-  if (typeof this !== "function") console.log("type error");
+function swap(arr, a, b) {
+  let temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
+```
 
-  let args = [...arguments].slice(1);
-  let result = null;
+```js
+// T O(n) S O(1)
+var moveZeroes = function (arr) {
+  let k = 0;
 
-  context = context || window;
-  context.fn = this;
-  result = context.fn(...args);
-  delete context.fn;
-
-  return result;
+  for (let i = 0; i < arr.length; i++)
+    if (arr[i])
+      if (i !== k) swap(arr, i, k++);
+      else k++;
 };
 ```
 
----
-
-# bind
-
-```js
-Function.prototype.myBind = function (context) {
-  if (typeof this !== "function") throw new Error("TypeError");
-
-  let args = [...arguments].slice(1);
-  let fn = this;
-
-  return function Fn() {
-    return fn.apply(
-      this instanceof Fn ? this : context,
-      args.concat(...arguments)
-    );
-  };
-};
-```
+<!-- swap函数方便复用，还必须得传入数组参数 -->
