@@ -9,7 +9,7 @@ class: "text-center"
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
 # show line numbers in code blocks
-lineNumbers: false
+lineNumbers: true
 # some information about the slides, markdown enabled
 info: |
   ## Slidev Starter Template
@@ -46,38 +46,28 @@ drawings:
 # apply
 
 ```js
-Function.prototype.myApply = function (context) {
-  if (typeof this !== "function") throw new Error("TypeError");
+Function.prototype.myApply = function (context, argsArray) {
+  if (typeof this !== "function") throw new TypeError("type error");
 
-  let result = null;
+  let fn = Symbol();
   context = context || window;
+  context[fn] = this;
 
-  context.fn = this;
-  if (arguments[1]) {
-    result = context.fn(...arguments[1]);
-  } else {
-    result = context.fn();
-  }
+  return context[fn](...argsArray);
 };
 ```
-
----
 
 # call
 
 ```js
-Function.prototype.myCall = function (context) {
-  if (typeof this !== "function") console.log("type error");
+Function.prototype.myCall = function (context, ...args) {
+  if (typeof this !== "function") throw new TypeError("type error");
 
-  let args = [...arguments].slice(1);
-  let result = null;
-
+  let fn = Symbol();
   context = context || window;
-  context.fn = this;
-  result = context.fn(...args);
-  delete context.fn;
+  context[fn] = this;
 
-  return result;
+  return context[fn](...args);
 };
 ```
 
