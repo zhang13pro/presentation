@@ -36,24 +36,12 @@ drawings:
 
 </div>
 
-- 函数调用
-- 方法调用
-- new 构造
+- 全局调用
+- 对象属性(方法)调用
 - 显式绑定
+- new 构造
 
----
-
-# new
-
-```js
-function myNew(fn, ...args) {
-  let obj = Object.create(fn.prototype);
-  let res = fn.call(obj, ...args);
-  if (res && (typeof res === "object" || typeof res === "function")) return res;
-
-  return obj;
-}
-```
+<!-- 优先级从上到下 -->
 
 ---
 
@@ -104,3 +92,30 @@ Function.prototype.myBind = function (context) {
   };
 };
 ```
+
+---
+
+# new
+
+```js
+function myNew(fn, ...args) {
+  let obj = Object.create(fn.prototype);
+  let res = fn.call(obj, ...args);
+  if (res && (typeof res === "object" || typeof res === "function")) return res;
+
+  return obj;
+}
+```
+
+# Object.create
+
+```js
+function create(obj) {
+  function F() {}
+  F.prototype = obj;
+
+  return new F();
+}
+```
+
+<!-- 循环引用了属于是 -->
