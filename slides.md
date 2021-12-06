@@ -29,11 +29,11 @@ drawings:
 
 # Before...
 
-- 不要忽视基本算法
-- 考虑极端(边界)条件
+- 不要忽视<strong>基本</strong>算法
+- 考虑极端(<em>边界</em>)条件
 - 正确本身是相对概念
 - 解决问题比没有解决强
-- 考虑怎样优化
+- 考虑怎样<strong>优化</strong>
 
  <!-- 正确本身是相对概念，空间换时间、预处理信息（排序）、瓶颈处寻找答案 -->
 
@@ -65,7 +65,7 @@ function binarySearch(arr, target) {
 
 ## LeetCode-283
 
-[# 移动零](https://leetcode-cn.com/problems/move-zeroes/)
+[# move-zeroes](https://leetcode-cn.com/problems/move-zeroes/)
 
 ```js
 function swap(arr, a, b) {
@@ -76,7 +76,7 @@ function swap(arr, a, b) {
 ```
 
 ```js
-// T O(n) S O(1)
+// T:O(n) S:O(1) 双指针
 var moveZeroes = function (arr) {
   let k = 0;
 
@@ -87,4 +87,50 @@ var moveZeroes = function (arr) {
 };
 ```
 
-<!-- swap函数方便复用，还必须得传入数组参数 -->
+## <!-- swap函数方便复用，还必须得传入数组参数 -->
+
+---
+
+## LeetCode-27
+
+[# remove-element](https://leetcode-cn.com/problems/remove-element/)
+
+要求不使用额外<em>空间</em>
+
+```js
+// T:O(n) S:O(1) 双指针
+function removeElement(arr, target) {
+  let count = 0;
+  const len = arr.length;
+  for (let i = 0; i < len; i++)
+    if (arr[i] === target) continue;
+    else arr[count++] = arr[i];
+
+  return count;
+}
+```
+
+ <!-- [1,2,2,4] 2 -->
+
+---
+
+## LeetCode-26
+
+[# remove-duplicates-from-sorted-array](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+要求不使用额外<em>空间</em>
+
+```js
+// T:O(n) S:O(1) 双指针
+function removeDuplicates(arr) {
+  const len = arr.length;
+  let count = 1;
+
+  if (len < 2) return len;
+  for (let i = 1; i < len; i++)
+    if (arr[i] === arr[i - 1]) continue;
+    else arr[count++] = arr[i];
+
+  return count;
+}
+```
